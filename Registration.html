@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Registration</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+    <style>
+        body {
+            background: linear-gradient(135deg, #4CAF50 30%, #2196F3 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .container {
+            max-width: 400px;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.8);
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 class="text-center">User Registration</h1>
+        <form id="registerForm">
+            <div class="form-group">
+                <label for="id">Student ID:</label>
+                <input type="text" id="id" name="id" class="form-control" required>
+            </div>
+            <div class="form-group">
+                <label for="name">Name:</label>
+                <input type="text" id="name" name="name" class="form-control" required>
+            </div>
+            <div class="form-group">
+                <label for="email">Email:</label>
+                <input type="email" id="email" name="email" class="form-control" required>
+            </div>
+            <div class="form-group">
+                <label for="faculty">Faculty:</label>
+                <input type="text" id="faculty" name="faculty" class="form-control" required>
+            </div>
+            <button type="submit" class="btn btn-primary btn-block">Register</button>
+            <p id="demo" class="text-center"></p>
+        </form>
+    </div>
+
+    <script>
+        async function registerUser() {
+            var id = document.getElementById("id").value;
+            var name = document.getElementById("name").value;
+            var email = document.getElementById("email").value;
+            var faculty = document.getElementById("faculty").value;
+
+            if (!id || !name || !email || !faculty) {
+                alert("Please fill in all fields.");
+                return;
+            }
+
+            try {
+                const response = await fetch('http://localhost:3000/register', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ id: id, name: name, email: email, faculty: faculty })
+                });
+                const data = await response.json();
+                if (data.success) {
+                    alert("User registered successfully! Click OK to proceed to login page.");
+                    window.location.href = "login.html";
+                } else {
+                    alert("Error registering user. Please try again.");
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert("Error registering user. Please try again.",error);
+            }
+        }
+
+        const form = document.getElementById('registerForm');
+        form.addEventListener('submit', (e) => {
+            e.preventDefault();
+            registerUser();
+        });
+    </script>
+</body>
+</html>

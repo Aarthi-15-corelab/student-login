@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background: linear-gradient(135deg, #4CAF50 30%, #2196F3 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .container {
+            background: rgba(255, 255, 255, 0.8);
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            width: 100%;
+            max-width: 400px;
+            /* Set a max-width for the container */
+        }
+
+        h1 {
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        .form-control {
+            margin-bottom: 20px;
+        }
+
+        .btn-custom {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+        }
+
+        .btn-custom:hover {
+            background-color: #45a049;
+        }
+
+        p {
+            margin-top: 20px;
+            color: #333;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>Login</h1>
+        <form id="loginForm">
+            <div class="form-group">
+                <label for="studentId">Student ID:</label>
+                <input type="text" class="form-control" id="studentId" name="studentId" required>
+            </div>
+            <button type="submit" class="btn btn-success btn-custom">Login</button>
+            <button type="button" class="btn btn-primary btn-custom" id="registerButton">Register</button>
+            <p id="demo"></p>
+        </form>
+    </div>
+
+    <!-- Bootstrap JS and dependencies -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+    <!-- No changes in the HTML structure, only updated the JavaScript code -->
+<script>
+  async function checkStudent() {
+    const studentId = document.getElementById("studentId").value;
+
+    if (!studentId) {
+      alert("Please enter your student ID.");
+      return;
+    }
+
+    try {
+      const response = await fetch('http://192.168.1.110:3000/check_student', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ studentId: studentId })
+      });
+      const data = await response.json();
+      if (data.success) {
+        alert("Login successful!");
+        // Redirect to dashboard or profile page
+        //window.location.href = "index.html";
+      } else {
+        alert("Student not found. Kindly Register the details");
+      }
+    } catch (error) {
+      console.error('Error:', error);
+      alert("Error logging in. Please try again.");
+    }
+  }
+
+  const form = document.getElementById('loginForm');
+  form.addEventListener('submit', (e) => {
+    e.preventDefault();
+    checkStudent();
+  });
+
+  const registerButton = document.getElementById('registerButton');
+  registerButton.addEventListener('click', () => {
+    window.location.href = "Registration.html";
+  });
+</script>
+</body>
+
+</html>
